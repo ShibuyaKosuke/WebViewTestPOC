@@ -57,22 +57,5 @@ namespace WebViewTestPOC
             // メッセージを解析してクリックされた要素などの情報を取得
             MessageBox.Show($"Clicked Element: {message}");
         }
-
-        private void WebViewForm_Resize(object sender, EventArgs e)
-        {
-            // Adjust the size and position of controls when the form is resized
-            int newWidth = ClientSize.Width;
-            int newHeight = ClientSize.Height;
-
-            // Adjust TxtUrl control
-            TxtUrl.Width = newWidth - TxtUrl.Left - BtnMove.Width - 10;
-
-            // Adjust BtnMove control
-            BtnMove.Left = newWidth - BtnMove.Width - 10;
-
-            // Adjust WebView control
-            WebView.Width = newWidth - 24; // Adjusting for the borders and padding
-            WebView.Height = newHeight - TxtUrl.Height - 50; // Adjusting for the other controls and padding
-        }
     }
 }
