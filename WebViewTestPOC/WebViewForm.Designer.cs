@@ -28,64 +28,54 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.txtUrl = new System.Windows.Forms.TextBox();
-            this.lblUrl = new System.Windows.Forms.Label();
-            this.btnMove = new System.Windows.Forms.Button();
-            this.webView = new Microsoft.Web.WebView2.WinForms.WebView2();
-            ((System.ComponentModel.ISupportInitialize)(this.webView)).BeginInit();
+            this.TxtUrl = new System.Windows.Forms.TextBox();
+            this.BtnMove = new System.Windows.Forms.Button();
+            this.WebView = new Microsoft.Web.WebView2.WinForms.WebView2();
+            ((System.ComponentModel.ISupportInitialize)(this.WebView)).BeginInit();
             this.SuspendLayout();
             // 
-            // txtUrl
+            // TxtUrl
             // 
-            this.txtUrl.Location = new System.Drawing.Point(45, 12);
-            this.txtUrl.Name = "txtUrl";
-            this.txtUrl.Size = new System.Drawing.Size(662, 19);
-            this.txtUrl.TabIndex = 0;
-            this.txtUrl.Text = "https://qiita.com/signup";
+            this.TxtUrl.Location = new System.Drawing.Point(12, 12);
+            this.TxtUrl.Name = "TxtUrl";
+            this.TxtUrl.Size = new System.Drawing.Size(695, 19);
+            this.TxtUrl.TabIndex = 0;
+            this.TxtUrl.Text = "https://qiita.com/signup";
             // 
-            // lblUrl
+            // BtnMove
             // 
-            this.lblUrl.AutoSize = true;
-            this.lblUrl.Location = new System.Drawing.Point(12, 15);
-            this.lblUrl.Name = "lblUrl";
-            this.lblUrl.Size = new System.Drawing.Size(27, 12);
-            this.lblUrl.TabIndex = 1;
-            this.lblUrl.Text = "URL";
+            this.BtnMove.Location = new System.Drawing.Point(713, 10);
+            this.BtnMove.Name = "BtnMove";
+            this.BtnMove.Size = new System.Drawing.Size(75, 23);
+            this.BtnMove.TabIndex = 2;
+            this.BtnMove.Text = "移動";
+            this.BtnMove.UseVisualStyleBackColor = true;
             // 
-            // btnMove
+            // WebView
             // 
-            this.btnMove.Location = new System.Drawing.Point(713, 10);
-            this.btnMove.Name = "btnMove";
-            this.btnMove.Size = new System.Drawing.Size(75, 23);
-            this.btnMove.TabIndex = 2;
-            this.btnMove.Text = "移動";
-            this.btnMove.UseVisualStyleBackColor = true;
-            // 
-            // webView
-            // 
-            this.webView.AllowExternalDrop = true;
-            this.webView.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.webView.CreationProperties = null;
-            this.webView.DefaultBackgroundColor = System.Drawing.Color.White;
-            this.webView.Location = new System.Drawing.Point(12, 37);
-            this.webView.Name = "webView";
-            this.webView.Size = new System.Drawing.Size(776, 401);
-            this.webView.TabIndex = 3;
-            this.webView.ZoomFactor = 1D;
-            this.webView.NavigationCompleted += new System.EventHandler<Microsoft.Web.WebView2.Core.CoreWebView2NavigationCompletedEventArgs>(this.webView_NavigationCompleted);
+            this.WebView.AllowExternalDrop = true;
+            this.WebView.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.WebView.CreationProperties = null;
+            this.WebView.DefaultBackgroundColor = System.Drawing.Color.White;
+            this.WebView.Location = new System.Drawing.Point(12, 37);
+            this.WebView.Name = "WebView";
+            this.WebView.Size = new System.Drawing.Size(776, 401);
+            this.WebView.TabIndex = 3;
+            this.WebView.ZoomFactor = 1D;
+            this.WebView.NavigationCompleted += new System.EventHandler<Microsoft.Web.WebView2.Core.CoreWebView2NavigationCompletedEventArgs>(this.WebView_NavigationCompleted);
             // 
             // WebViewForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.webView);
-            this.Controls.Add(this.btnMove);
-            this.Controls.Add(this.lblUrl);
-            this.Controls.Add(this.txtUrl);
+            this.Controls.Add(this.WebView);
+            this.Controls.Add(this.BtnMove);
+            this.Controls.Add(this.TxtUrl);
             this.Name = "WebViewForm";
             this.Text = "WebViewForm";
-            ((System.ComponentModel.ISupportInitialize)(this.webView)).EndInit();
+            this.Resize += new System.EventHandler(this.WebViewForm_Resize);
+            ((System.ComponentModel.ISupportInitialize)(this.WebView)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -93,10 +83,9 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox txtUrl;
-        private System.Windows.Forms.Label lblUrl;
-        private System.Windows.Forms.Button btnMove;
-        private Microsoft.Web.WebView2.WinForms.WebView2 webView;
+        private System.Windows.Forms.TextBox TxtUrl;
+        private System.Windows.Forms.Button BtnMove;
+        private Microsoft.Web.WebView2.WinForms.WebView2 WebView;
     }
 }
 

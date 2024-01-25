@@ -17,21 +17,21 @@ namespace WebViewTestPOC
 
         private async void InitializeWebView()
         {
-            webView.CoreWebView2InitializationCompleted += webView_CoreWebView2InitializationCompleted;
-            webView.NavigationCompleted += webView_NavigationCompleted;
-            await webView.EnsureCoreWebView2Async();
+            WebView.CoreWebView2InitializationCompleted += WebView_CoreWebView2InitializationCompleted;
+            WebView.NavigationCompleted += WebView_NavigationCompleted;
+            await WebView.EnsureCoreWebView2Async();
 
-            webView.CoreWebView2.WebMessageReceived += CoreWebView2_WebMessageReceived;
+            WebView.CoreWebView2.WebMessageReceived += CoreWebView2_WebMessageReceived;
         }
 
-        private void webView_CoreWebView2InitializationCompleted(object sender, CoreWebView2InitializationCompletedEventArgs e)
+        private void WebView_CoreWebView2InitializationCompleted(object sender, CoreWebView2InitializationCompletedEventArgs e)
         {
             // WebView2にHTMLをセットする
             string htmlContent = "<html><body><form><input type='text' name='txt' /><input type='text' name='url' /></form></body></html>";
-            webView.CoreWebView2.NavigateToString(htmlContent);
+            WebView.CoreWebView2.NavigateToString(htmlContent);
         }
 
-        private async void webView_NavigationCompleted(object sender, CoreWebView2NavigationCompletedEventArgs e)
+        private async void WebView_NavigationCompleted(object sender, CoreWebView2NavigationCompletedEventArgs e)
         {
             if (!navigationCompleted)
             {
@@ -46,7 +46,7 @@ namespace WebViewTestPOC
         private async Task EditAndSetHTMLAsync()
         {
             // WebView2でJavaScriptを実行してHTMLを編集する
-            await webView.CoreWebView2.ExecuteScriptAsync("document.querySelector('form').addEventListener('click', function(event) { window.chrome.webview.postMessage(event.target.getAttribute('name')); });");
+            await WebView.CoreWebView2.ExecuteScriptAsync("document.querySelector('form').addEventListener('click', function(event) { window.chrome.webview.postMessage(event.target.getAttribute('name')); });");
         }
 
         private void CoreWebView2_WebMessageReceived(object sender, CoreWebView2WebMessageReceivedEventArgs e)
@@ -56,6 +56,23 @@ namespace WebViewTestPOC
 
             // メッセージを解析してクリックされた要素などの情報を取得
             MessageBox.Show($"Clicked Element: {message}");
+        }
+
+        private void WebViewForm_Resize(object sender, EventArgs e)
+        {
+            // Adjust the size and position of controls when the form is resized
+            int newWidth = ClientSize.Width;
+            int newHeight = ClientSize.Height;
+
+            // Adjust TxtUrl control
+            TxtUrl.Width = newWidth - TxtUrl.Left - BtnMove.Width - 10;
+
+            // Adjust BtnMove control
+            BtnMove.Left = newWidth - BtnMove.Width - 10;
+
+            // Adjust WebView control
+            WebView.Width = newWidth - 24; // Adjusting for the borders and padding
+            WebView.Height = newHeight - TxtUrl.Height - 50; // Adjusting for the other controls and padding
         }
     }
 }
