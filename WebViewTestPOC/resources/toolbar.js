@@ -3,7 +3,8 @@ function scenario_toolbar(scenario_header) {
     scenario_toolbar.id = 'scenario_toolbar';
 
     const scenario_toolbar_title = document.createElement('div');
-    scenario_toolbar_title.innerText = '€–Ú‚ğƒhƒ‰ƒbƒO';
+    scenario_toolbar_title.innerText = 'é …ç›®ã‚’ãƒ‰ãƒ©ãƒƒã‚°';
+    scenario_toolbar.appendChild(scenario_toolbar_title);
 
     document.body.appendChild(scenario_toolbar);
 
