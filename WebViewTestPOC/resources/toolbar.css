@@ -1,0 +1,8 @@
+
+#scenario_toolbar {
+    width: 100px;
+    background-color: rgba(0,0,0,0.2);
+    padding: 0.5rem;
+    float: left;
+    font-size: .75rem;
+}

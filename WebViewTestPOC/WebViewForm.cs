@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -30,7 +31,7 @@ namespace WebViewTestPOC
         private void WebView_CoreWebView2InitializationCompleted(object sender, CoreWebView2InitializationCompletedEventArgs e)
         {
             // WebView2にHTMLをセットする
-            string htmlContent = "<html><body><form><input type='text' name='txt' /><input type='text' name='url' /></form></body></html>";
+            string htmlContent = "<html><head></head><body><form><input type='text' name='txt' /><input type='text' name='url' /></form></body></html>";
             WebView.CoreWebView2.NavigateToString(htmlContent);
         }
 
@@ -52,7 +53,7 @@ namespace WebViewTestPOC
         {
             // WebView2でJavaScriptを実行してHTMLを編集する
             await WebView.CoreWebView2.ExecuteScriptAsync("document.querySelector('body').addEventListener('click', function(event) { window.chrome.webview.postMessage(event.target.getAttribute('name')); });");
-            await WebView.CoreWebView2.ExecuteScriptAsync( @"document.addEventListener('mouseover', function(event) { 
+            await WebView.CoreWebView2.ExecuteScriptAsync(@"document.addEventListener('mouseover', function(event) { 
                     event.target.style.border = '3px solid red'    
                 } )");
             await WebView.CoreWebView2.ExecuteScriptAsync(@"document.addEventListener('mouseout', function(event) { 
@@ -63,7 +64,7 @@ namespace WebViewTestPOC
         private void CoreWebView2_WebMessageReceived(object sender, CoreWebView2WebMessageReceivedEventArgs e)
         {
             // JavaScriptからのメッセージを受信
-            if( e.WebMessageAsJson == null || e.WebMessageAsJson == "null") return;
+            if (e.WebMessageAsJson == null || e.WebMessageAsJson == "null") return;
             var message = e.TryGetWebMessageAsString();
 
             // メッセージを解析してクリックされた要素などの情報を取得
@@ -103,23 +104,49 @@ namespace WebViewTestPOC
 
         private async Task MakeToolbox(string[] header)
         {
+            // CSS
+            await WebView.CoreWebView2.ExecuteScriptAsync(@"const style = document.createElement('style');");
+            await WebView.CoreWebView2.ExecuteScriptAsync(@"style.innerText = '" + ReadResource("resources/toolbar.css") + "';");
+            await WebView.CoreWebView2.ExecuteScriptAsync(@"document.head.appendChild(style);");
+
+
+            // Toolbar
+            await WebView.CoreWebView2.ExecuteScriptAsync(@"" + ReadResource("resources/toolbar.js"));
+
             string headersScript = @"var scenario_header = [" + string.Join(", ", header.Select(h => "'" + h + "'")) + "];";
             await WebView.CoreWebView2.ExecuteScriptAsync(headersScript);
 
-            await WebView.CoreWebView2.ExecuteScriptAsync(@"const scenario_toolbar = document.createElement('div');");
-            await WebView.CoreWebView2.ExecuteScriptAsync(@"scenario_toolbar.id = 'scenario_toolbar';");
-            await WebView.CoreWebView2.ExecuteScriptAsync(@"scenario_toolbar.style.width = '100px';");
-            await WebView.CoreWebView2.ExecuteScriptAsync(@"scenario_toolbar.style.backgroundColor = 'rgba(0,0,0,0.2)';");
-            await WebView.CoreWebView2.ExecuteScriptAsync(@"scenario_toolbar.style.padding = '0.5rem';");
-            await WebView.CoreWebView2.ExecuteScriptAsync(@"scenario_toolbar.style.float = 'left';");
-            await WebView.CoreWebView2.ExecuteScriptAsync(@"scenario_toolbar.style.fontSize = '.75rem';");
+            await WebView.CoreWebView2.ExecuteScriptAsync(@"scenario_toolbar(scenario_header);");
+        }
 
-            await WebView.CoreWebView2.ExecuteScriptAsync(@"const scenario_toolbar_title = document.createElement('div');");
-            await WebView.CoreWebView2.ExecuteScriptAsync(@"scenario_toolbar_title.innerText = '項目をドラッグ';");
+        private string ReadResource(string filePath)
+        {
+            // 実行中のアセンブリを取得
+            var assembly = System.Reflection.Assembly.GetExecutingAssembly();
 
-            await WebView.CoreWebView2.ExecuteScriptAsync(@"document.body.appendChild(scenario_toolbar);");
+            // アセンブリの場所 (ファイルパス) を取得
+            string assemblyLocation = assembly.Location;
 
-            await WebView.CoreWebView2.ExecuteScriptAsync(@"const items = scenario_header.map(header => { const item = document.createElement('div'); item.innerText = header; scenario_toolbar.appendChild(item); return item; });");
+            // 実行ファイルのディレクトリを取得
+            string executableDirectory = System.IO.Path.GetDirectoryName(assemblyLocation);
+
+            string resourceFile = Path.Combine(executableDirectory, filePath);
+
+
+            // ファイルが存在するか確認
+            if (File.Exists(resourceFile))
+            {
+                // ファイルを読み込む
+                string content = File.ReadAllText(resourceFile);
+
+                // 改行を取り除く
+                return content.Replace("\r", "").Replace("\n", "");
+
+            }
+            else
+            {
+                throw new Exception("指定したファイルは存在しません。");
+            }
         }
     }
 }
