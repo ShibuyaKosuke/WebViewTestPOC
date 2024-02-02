@@ -2,7 +2,24 @@
 #scenario_toolbar {
     width: 100px;
     background-color: rgba(0,0,0,0.2);
-    padding: 0.5rem;
+    padding: 0;
     float: left;
     font-size: .75rem;
+    outline: none !important;
 }
+
+    #scenario_toolbar .toolbar_title {
+        background-color: rgba(0,0,0,1);
+        color: white;
+        font-weight: bold;
+        text-align: center;
+        padding: 0.25rem;
+        outline: none !important;
+        cursor: move;
+    }
+
+    #scenario_toolbar .toolbar_item {
+        padding: 0.15rem;
+        border: 1px solid #808080;
+        outline: none !important;
+    }

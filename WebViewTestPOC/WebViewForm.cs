@@ -25,7 +25,10 @@ namespace WebViewTestPOC
             WebView.NavigationCompleted += WebView_NavigationCompleted;
             await WebView.EnsureCoreWebView2Async();
 
+            WebView.CoreWebView2.Settings.IsScriptEnabled = true;
+
             WebView.CoreWebView2.WebMessageReceived += CoreWebView2_WebMessageReceived;
+
         }
 
         private void WebView_CoreWebView2InitializationCompleted(object sender, CoreWebView2InitializationCompletedEventArgs e)
@@ -54,10 +57,10 @@ namespace WebViewTestPOC
             // WebView2でJavaScriptを実行してHTMLを編集する
             await WebView.CoreWebView2.ExecuteScriptAsync("document.querySelector('body').addEventListener('click', function(event) { window.chrome.webview.postMessage(event.target.getAttribute('name')); });");
             await WebView.CoreWebView2.ExecuteScriptAsync(@"document.addEventListener('mouseover', function(event) { 
-                    event.target.style.border = '3px solid red'    
+                    event.target.style.outline = '3px solid red'    
                 } )");
             await WebView.CoreWebView2.ExecuteScriptAsync(@"document.addEventListener('mouseout', function(event) { 
-                    event.target.style.border = ''    
+                    event.target.style.outline = ''    
                 } )");
         }
 
