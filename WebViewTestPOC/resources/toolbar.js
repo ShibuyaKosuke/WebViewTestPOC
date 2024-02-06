@@ -1,8 +1,6 @@
 function scenario_toolbar(scenario_header) {
     const scenario_toolbar = document.createElement('div');
     scenario_toolbar.id = 'scenario_toolbar';
-    scenario_toolbar.className = 'draggable';
-    scenario_toolbar.setAttribute('draggable', 'true');
 
     const scenario_toolbar_title = document.createElement('div');
     scenario_toolbar_title.className = "toolbar_title";
@@ -14,6 +12,8 @@ function scenario_toolbar(scenario_header) {
     const items = scenario_header.map(header => {
         const item = document.createElement('div');
         item.className = "toolbar_item";
+        item.className = 'draggable';
+        item.setAttribute('draggable', 'true');
         item.innerText = header; scenario_toolbar.appendChild(item);
         return item;
     });
