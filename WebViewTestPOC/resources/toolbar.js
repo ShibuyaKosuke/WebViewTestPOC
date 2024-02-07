@@ -19,15 +19,29 @@ function scenario_toolbar(scenario_header) {
     });
 
     scenario_toolbar.addEventListener('dragstart', (event) => {
-        event.dataTransfer.setData('text/plain', 'Dragging...');
+        event.dataTransfer.setData('text/plain', event.srcElement.innerText);
     });
     
     scenario_toolbar.addEventListener('drag', (event) => {
     });
 
     scenario_toolbar.addEventListener('dragend', (event) => {
+        console.log('dragend');
+    });
+
+    const droppable = document.querySelectorAll("select,input");
+    droppable.forEach((form) => {
+        form.classList.add("droppable");
+        form.addEventListener('drop', (event) => {
+            event.preventDefault();
+
+            droppableItem = event.target;
+
+            const label = event.dataTransfer.getData('text/plain');
+            droppableItem.setAttribute("dropped-item", label);
+            console.log(droppableItem.name);
+        });
     });
 
     return scenario_toolbar;
 }
-
