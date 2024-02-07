@@ -55,13 +55,7 @@ namespace WebViewTestPOC
         private async Task EditAndSetHTMLAsync()
         {
             // WebView2でJavaScriptを実行してHTMLを編集する
-            await WebView.CoreWebView2.ExecuteScriptAsync("document.querySelector('body').addEventListener('click', function(event) { window.chrome.webview.postMessage(event.target.getAttribute('name')); });");
-            await WebView.CoreWebView2.ExecuteScriptAsync(@"document.addEventListener('mouseover', function(event) { 
-                    event.target.style.outline = '3px solid red'    
-                } )");
-            await WebView.CoreWebView2.ExecuteScriptAsync(@"document.addEventListener('mouseout', function(event) { 
-                    event.target.style.outline = ''    
-                } )");
+            await WebView.CoreWebView2.ExecuteScriptAsync(@"" + ReadResource("resources/ready.js"));
         }
 
         private void CoreWebView2_WebMessageReceived(object sender, CoreWebView2WebMessageReceivedEventArgs e)
