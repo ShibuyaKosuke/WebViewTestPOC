@@ -58,7 +58,6 @@ namespace WebViewTestPOC
         private async Task EditAndSetHTMLAsync()
         {
             // WebView2でJavaScriptを実行してHTMLを編集する
-            await WebView.CoreWebView2.ExecuteScriptAsync("document.querySelector('body').addEventListener('click', function(event) { window.chrome.webview.postMessage(event.target.getAttribute('name')); });");
             await WebView.CoreWebView2.ExecuteScriptAsync(@"document.addEventListener('mouseover', function(event) { 
                     event.target.style.outline = '3px solid red'    
                 } )");
@@ -78,8 +77,7 @@ namespace WebViewTestPOC
             if (e.WebMessageAsJson == null || e.WebMessageAsJson == "null") return;
             var message = e.TryGetWebMessageAsString();
 
-            // メッセージを解析してクリックされた要素などの情報を取得
-            MessageBox.Show($"Clicked Element: {message.ToString()}");
+            textBox1.Text += message + "\n\r=====================\n\r";
         }
 
         private async void BtnOpenCsv_Click(object sender, EventArgs e)

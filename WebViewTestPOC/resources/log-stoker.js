@@ -37,7 +37,15 @@ function logStoker()
 {
     const callback = function (e) {
         var xpath = getElementXPath(e.target);
-        console.info(e.view.location.href, e.target, e.type, xpath);
+
+        var content = {
+            url: e.view.location.href,
+            event: e.type,
+            xpath: xpath
+        };
+        var jsonString = JSON.stringify(content);
+
+        window.chrome.webview.postMessage(jsonString);
     };
 
     document.addEventListener('click', callback);
