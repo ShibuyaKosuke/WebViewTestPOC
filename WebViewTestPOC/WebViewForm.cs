@@ -47,6 +47,9 @@ namespace WebViewTestPOC
 
                 // WebView2のナビゲーションが完了したら、非同期メソッドを呼び出す
                 await EditAndSetHTMLAsync();
+
+                // Log
+                await AddLogStoker();
             }
 
             btnOpenCsv.Enabled = true;
@@ -62,6 +65,11 @@ namespace WebViewTestPOC
             await WebView.CoreWebView2.ExecuteScriptAsync(@"document.addEventListener('mouseout', function(event) { 
                     event.target.style.outline = ''    
                 } )");
+        }
+
+        private async Task AddLogStoker()
+        {
+            await WebView.CoreWebView2.ExecuteScriptAsync(@"" + ReadResource("resources/log-stoker.js"));
         }
 
         private void CoreWebView2_WebMessageReceived(object sender, CoreWebView2WebMessageReceivedEventArgs e)
