@@ -41,6 +41,7 @@ function logStoker()
         var content = {
             url: e.view.location.href,
             event: e.type,
+            name: e.target.name,
             xpath: xpath
         };
         var jsonString = JSON.stringify(content);
