@@ -15,6 +15,7 @@ namespace WebViewTestPOC
 
         public WebViewForm()
         {
+            this.WindowState = FormWindowState.Maximized;
             InitializeComponent();
             InitializeWebView();
         }
@@ -33,20 +34,38 @@ namespace WebViewTestPOC
 
         private void WebView_CoreWebView2InitializationCompleted(object sender, CoreWebView2InitializationCompletedEventArgs e)
         {
+            NavigationToSample();
+        }
+
+        private void NavigationToSample()
+        {
+            navigationCompleted = false;
             // WebView2にHTMLをセットする
             string htmlContent = "<html><head></head><body><form><input type='text' name='txt' /><input type='text' name='url' /></form></body></html>";
             WebView.CoreWebView2.NavigateToString(htmlContent);
+        }
+
+        private async void NavigationToUrl(string url)
+        {
+            navigationCompleted = false;
+
+            // WebView2にURLをセットする
+            WebView.CoreWebView2.Navigate(url);
+
         }
 
         private async void WebView_NavigationCompleted(object sender, CoreWebView2NavigationCompletedEventArgs e)
         {
             if (!navigationCompleted)
             {
-                // フラグを設定
-                navigationCompleted = true;
-
                 // WebView2のナビゲーションが完了したら、非同期メソッドを呼び出す
                 await EditAndSetHTMLAsync();
+
+                // Log
+                await AddLogStoker();
+
+                // フラグを設定
+                navigationCompleted = true;
             }
 
             btnOpenCsv.Enabled = true;
@@ -55,7 +74,6 @@ namespace WebViewTestPOC
         private async Task EditAndSetHTMLAsync()
         {
             // WebView2でJavaScriptを実行してHTMLを編集する
-            await WebView.CoreWebView2.ExecuteScriptAsync("document.querySelector('body').addEventListener('click', function(event) { window.chrome.webview.postMessage(event.target.getAttribute('name')); });");
             await WebView.CoreWebView2.ExecuteScriptAsync(@"document.addEventListener('mouseover', function(event) { 
                     event.target.style.outline = '3px solid red'    
                 } )");
@@ -64,14 +82,18 @@ namespace WebViewTestPOC
                 } )");
         }
 
+        private async Task AddLogStoker()
+        {
+            await WebView.CoreWebView2.ExecuteScriptAsync(@"" + ReadResource("resources/log-stoker.js"));
+        }
+
         private void CoreWebView2_WebMessageReceived(object sender, CoreWebView2WebMessageReceivedEventArgs e)
         {
             // JavaScriptからのメッセージを受信
             if (e.WebMessageAsJson == null || e.WebMessageAsJson == "null") return;
             var message = e.TryGetWebMessageAsString();
 
-            // メッセージを解析してクリックされた要素などの情報を取得
-            MessageBox.Show($"Clicked Element: {message.ToString()}");
+            textBox1.Text += message + "\n\r=====================\n\r";
         }
 
         private async void BtnOpenCsv_Click(object sender, EventArgs e)
@@ -150,6 +172,26 @@ namespace WebViewTestPOC
             {
                 throw new Exception("指定したファイルは存在しません。");
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            txt_url.Text = "";
+            NavigationToSample();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            string url = txt_url.Text;
+            if (url != "")
+            {
+                NavigationToUrl(url);
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            textBox1.Text = "";
         }
     }
 }

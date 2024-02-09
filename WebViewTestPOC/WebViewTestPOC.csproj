@@ -93,6 +93,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="resources\log-stoker.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="resources\toolbar.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
